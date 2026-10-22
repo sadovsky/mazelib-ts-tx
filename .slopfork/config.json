@@ -4,15 +4,16 @@
     "repo_url": "https://github.com/john-science/mazelib",
     "revision": "56cd88294a36746bbd324c2c9f7e4ab26095deb3",
     "license": "MIT",
-    "runnable": null
+    "runnable": "PYTHONPATH=<dir with mazelib symlink + dist-info> python adapters/python_original.py (pure-python backend, numpy 2.5)"
   },
   "target": {
     "language": "typescript",
     "style": "idiomatic",
-    "src": "src"
+    "src": "src",
+    "runtime": "node>=22"
   },
   "mode": "transpile",
-  "phase": "intake",
+  "phase": "inventory",
   "sealed_paths": [
     "../mazelib-ts-tx-dirty",
     "../mazelib-ts-cr",
@@ -28,5 +29,60 @@
   ],
   "probe_commands": [],
   "default_level": "L2",
-  "modules": []
+  "modules": [
+    {
+      "name": "rng/python-random",
+      "level": "L2",
+      "status": "todo",
+      "notes": ""
+    },
+    {
+      "name": "rng/numpy-legacy",
+      "level": "L2",
+      "status": "todo",
+      "notes": ""
+    },
+    {
+      "name": "pyset (CPython set/tuple-hash emulation)",
+      "level": "L2",
+      "status": "todo",
+      "notes": ""
+    },
+    {
+      "name": "grid",
+      "level": "L2",
+      "status": "todo",
+      "notes": ""
+    },
+    {
+      "name": "generate/*",
+      "level": "L2",
+      "status": "todo",
+      "notes": ""
+    },
+    {
+      "name": "solve/*",
+      "level": "L2",
+      "status": "todo",
+      "notes": ""
+    },
+    {
+      "name": "transmute/*",
+      "level": "L2",
+      "status": "todo",
+      "notes": ""
+    },
+    {
+      "name": "maze (facade)",
+      "level": "L2",
+      "status": "todo",
+      "notes": ""
+    },
+    {
+      "name": "adapter",
+      "level": "L2",
+      "status": "todo",
+      "notes": ""
+    }
+  ]
 }
