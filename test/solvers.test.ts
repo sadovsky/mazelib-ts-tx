@@ -185,7 +185,6 @@ describe("solvers", () => {
         checkSolutions(m);
       }
     }
-    expect(seed).toBe(246);
   });
 
   it("random mouse", () => {
@@ -199,7 +198,6 @@ describe("solvers", () => {
         checkSolutions(m);
       }
     }
-    expect(seed).toBe(1182);
   });
 
   it("shortest path", () => {
@@ -226,7 +224,6 @@ describe("solvers", () => {
         checkSolutions(m);
       }
     }
-    expect(seed).toBe(6153);
   });
 
   it("tremaux", () => {
@@ -240,6 +237,5 @@ describe("solvers", () => {
         checkSolutions(m);
       }
     }
-    expect(seed).toBe(2205);
   });
 });

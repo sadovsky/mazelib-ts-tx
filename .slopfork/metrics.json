@@ -1,3 +1,25 @@
 {
-  "started_at": "2026-10-22T22:31:07Z"
+  "started_at": "2026-10-22T22:31:07Z",
+  "finished_at": "2026-10-22T22:53:00Z",
+  "src_loc": 2712,
+  "test_loc": 900,
+  "spec_questions": 0,
+  "guard_denials": 0,
+  "cases_exact": 2376,
+  "cases_invariant": 20,
+  "cases_total": 2396,
+  "deviations": [
+    {
+      "id": "gen/Ellers/v2/h12w17/s0-s7",
+      "count": 8,
+      "original": "OverflowError (int8 set ids)",
+      "port": "valid perfect maze (32-bit set ids)"
+    },
+    {
+      "id": "solve/Collision/{CellularAutomaton6x6,DungeonRooms10x10}/*",
+      "count": 12,
+      "original": "TypeError after robots collide",
+      "port": "falls back to a merging flood; returns a shortest valid solution"
+    }
+  ]
 }

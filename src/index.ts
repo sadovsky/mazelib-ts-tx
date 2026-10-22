@@ -1,7 +1,7 @@
 export { PyError } from "./errors.js";
 export { type Cell, Grid } from "./grid.js";
 export { Maze } from "./maze.js";
-export { PySet, pyHash } from "./pyset.js";
+export { PySet, type PyValue, pyHash } from "./pyset.js";
 export { MT19937, NpRandomState, PyRandom, npRandom, pyRandom, setSeed } from "./random/index.js";
 
 export { AldousBroder } from "./generate/AldousBroder.js";

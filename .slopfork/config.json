@@ -13,7 +13,7 @@
     "runtime": "node>=22"
   },
   "mode": "transpile",
-  "phase": "build",
+  "phase": "report",
   "sealed_paths": [
     "../mazelib-ts-tx-dirty",
     "../mazelib-ts-cr",
@@ -33,55 +33,55 @@
     {
       "name": "rng/python-random",
       "level": "L2",
-      "status": "todo",
+      "status": "verified@L2",
       "notes": ""
     },
     {
       "name": "rng/numpy-legacy",
       "level": "L2",
-      "status": "todo",
+      "status": "verified@L2",
       "notes": ""
     },
     {
       "name": "pyset (CPython set/tuple-hash emulation)",
       "level": "L2",
-      "status": "todo",
+      "status": "verified@L2",
       "notes": ""
     },
     {
       "name": "grid",
       "level": "L2",
-      "status": "todo",
+      "status": "verified@L2",
       "notes": ""
     },
     {
       "name": "generate/*",
       "level": "L2",
-      "status": "todo",
-      "notes": ""
+      "status": "verified@L2",
+      "notes": "Ellers deviates on 8 known-bug cases (original overflows int8)"
     },
     {
       "name": "solve/*",
       "level": "L2",
-      "status": "todo",
-      "notes": ""
+      "status": "verified@L2",
+      "notes": "Collision deviates on 12 known-bug cases (original crashes)"
     },
     {
       "name": "transmute/*",
       "level": "L2",
-      "status": "todo",
+      "status": "verified@L2",
       "notes": ""
     },
     {
       "name": "maze (facade)",
       "level": "L2",
-      "status": "todo",
+      "status": "verified@L2",
       "notes": ""
     },
     {
       "name": "adapter",
       "level": "L2",
-      "status": "todo",
+      "status": "verified@L2",
       "notes": ""
     }
   ]
