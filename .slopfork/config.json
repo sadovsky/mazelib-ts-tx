@@ -13,7 +13,7 @@
     "runtime": "node>=22"
   },
   "mode": "transpile",
-  "phase": "inventory",
+  "phase": "build",
   "sealed_paths": [
     "../mazelib-ts-tx-dirty",
     "../mazelib-ts-cr",
