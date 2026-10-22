@@ -8,6 +8,9 @@ const DEAD_END: Cell = [-9, -999];
 /** A robot's path; a trailing `null` marks a robot stopped by a collision. */
 type Path = (Cell | null)[];
 
+/** Raised where the original would crash: two robots met. */
+class CollisionDetected extends Error {}
+
 function isMarker(c: Cell | null): boolean {
   return cellEq(c, END) || cellEq(c, DEAD_END);
 }
@@ -25,12 +28,25 @@ function pathsKey(paths: Path[]): Set<string> {
  * 4. Re-flood until the result stops changing.
  *
  * The original crashes (TypeError) on the step after any collision, so it
- * only works on mazes without loops. Here collided robots are dropped, as the
- * algorithm intends, which gives a result on every maze.
+ * only works on mazes without loops (a known bug). This port runs the
+ * original algorithm unchanged until a collision happens, then falls back to
+ * a flood in which robots that meet merge and robots never re-enter a flooded
+ * cell, so it returns a shortest solution on every maze.
  */
 export class Collision extends MazeSolveAlgo {
   protected solveImpl(): Solution[] {
     const start = this.onEdge(this.start) ? this.pushEdge(this.start) : this.start;
+    const pristine = this.grid.copy();
+    try {
+      return this.collisionSolve(start);
+    } catch (e) {
+      if (!(e instanceof CollisionDetected)) throw e;
+      this.grid = pristine;
+      return this.fixEntrances(this.mergingFlood(start));
+    }
+  }
+
+  private collisionSolve(start: Cell): Solution[] {
 
     // flood the maze twice, and compare the results
     let paths = this.floodMaze(start);
@@ -96,27 +112,58 @@ export class Collision extends MazeSolveAlgo {
     return this.fixCollisions(temp);
   }
 
-  /** Where robots meet, build a wall and stop all of them. */
+  /**
+   * Look for robots that meet. The original builds a wall there, stops both
+   * robots, and then crashes on the next step, so a collision ends the
+   * faithful algorithm here.
+   */
   private fixCollisions(paths: Path[]): Path[] {
     const n = paths.length;
     for (let i = 0; i < n - 1; i++) {
       const here = paths[i][paths[i].length - 1];
       if (here === null || isMarker(here)) continue;
-      let collided = false;
       for (let j = i + 1; j < n; j++) {
         const there = paths[j][paths[j].length - 1];
         if (there === null || isMarker(there)) continue;
-        if (cellEq(here, there)) {
-          paths[j][paths[j].length - 1] = null;
-          collided = true;
-        }
-      }
-      if (collided) {
-        this.grid.set(here[0], here[1], 1);
-        paths[i][paths[i].length - 1] = null;
+        if (cellEq(here, there)) throw new CollisionDetected();
       }
     }
     return paths;
+  }
+
+  /**
+   * The fallback flood: all robots move one cell per step, a robot stops when
+   * it steps into a cell already flooded, and robots that arrive at the same
+   * cell together merge into the first of them. Every surviving path is a
+   * shortest path to its head, so the robots that reach the end are shortest
+   * solutions.
+   */
+  private mergingFlood(start: Cell): Path[] {
+    const flooded = new Set<string>([`${start[0]},${start[1]}`]);
+    let running: Path[] = [[start]];
+    const finished: Path[] = [];
+
+    if (this.withinOne(start, this.end)) return [[start, END]];
+    while (running.length > 0) {
+      const next: Path[] = [];
+      const arrived = new Set<string>();
+      for (const path of running) {
+        const last = path[path.length - 1] as Cell;
+        for (const neighbor of this.findUnblockedNeighbors(last)) {
+          const key = `${neighbor[0]},${neighbor[1]}`;
+          if (flooded.has(key) || arrived.has(key)) continue;
+          arrived.add(key);
+          const step = path.concat([midpoint(last, neighbor), neighbor]);
+          if (this.withinOne(neighbor, this.end)) finished.push(step.concat([END]));
+          else next.push(step);
+        }
+      }
+      for (const key of arrived) flooded.add(key);
+      if (finished.length > 0) break;
+      running = next;
+    }
+
+    return finished;
   }
 
   /** Keep the robots that reached the end, and trim the entrances off their paths. */

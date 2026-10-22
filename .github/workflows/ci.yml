@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out the shared goldens
+        uses: actions/checkout@v4
+        with:
+          repository: sadovsky/slopfork-mazelib-goldens
+          path: goldens
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Unit tests
+        run: npx vitest run
+
+      - name: Goldens (exact compare + invariant check, profile tx)
+        run: |
+          H=.claude/skills/slopfork/scripts/diff_harness.py
+          G=goldens
+          for set in rng generate entrances solve transmute tostring monte_carlo; do
+            echo "::group::$set"
+            python3 $H compare --batch --profile tx --cases $G/cases/$set.jsonl --expected $G/expected/$set.jsonl --cmd "npx tsx adapter/adapter.ts"
+            python3 $H check --batch --profile tx --cases $G/cases/$set.jsonl --cmd "npx tsx adapter/adapter.ts" --checker "python3 $G/checkers/invariants.py"
+            echo "::endgroup::"
+          done

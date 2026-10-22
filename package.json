@@ -15,7 +15,8 @@
   "files": [
     "dist",
     "NOTICE",
-    "LICENSE"
+    "LICENSE",
+    "README.md"
   ],
   "engines": {
     "node": ">=22"
@@ -30,5 +31,9 @@
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vitest": "^5.0.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sadovsky/mazelib-ts-tx"
   }
 }
